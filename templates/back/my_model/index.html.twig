@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}MyModel index{% endblock %}
+
+{% block body %}
+    <h1>MyModel index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Label</th>
+                <th>Code</th>
+                <th>Value</th>
+                <th>Date</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for my_model in my_models %}
+            <tr>
+                <td>{{ my_model.id }}</td>
+                <td>{{ my_model.label }}</td>
+                <td>{{ my_model.code }}</td>
+                <td>{{ my_model.value }}</td>
+                <td>{{ my_model.date ? my_model.date|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('back_my_model_edit', {'id': my_model.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('back_my_model_new') }}">Create new</a>
+{% endblock %}

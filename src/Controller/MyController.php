@@ -17,8 +17,6 @@ class MyController extends AbstractController
      */
     public function test(): Response
     {
-//        dd('zzz');
-
         return $this->render('home.html.twig');
     }
 }
