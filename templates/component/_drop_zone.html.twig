@@ -1,0 +1,18 @@
+{#
+@param string uploadUrl
+@param string id
+@param int maxCount
+#}
+
+<div
+    class="drop-zone"
+    data-drop-zone="{{ uploadUrl }}"
+    data-drop-zone-id="{{ id|default('drop-zone') }}"
+    data-drop-zone-max-count="{{ maxCount|default(1) }}"
+>
+    <div class="drop-zone_area"></div>
+    <div class="drop-zone_progress"></div>
+    <div class="drop-zone_list">
+        {# use _drop_zone_file.html.twig here #}
+    </div>
+</div>

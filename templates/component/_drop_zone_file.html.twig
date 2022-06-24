@@ -1,0 +1,15 @@
+{#
+@param App\Entity\File file
+#}
+
+<div class="file">
+    <div class="file_icon">X</div>
+    <div class="file_info">
+        <div class="file_info--name">{{ file.originalName }}</div>
+        <div class="file_info--size">{{ file.size }}Mb</div>
+    </div>
+    <div class="file_action">
+        <a href="{{ path('download_file', {file: file.id}) }}">Télécharger</a>
+        <a href="{{ path('remove_file', {file: file.id}) }}">Supprimer</a>
+    </div>
+</div>

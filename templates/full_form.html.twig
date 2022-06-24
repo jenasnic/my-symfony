@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <h1>Full form - FormKit</h1>
+
+    {{ form_start(form) }}
+
+        {% include 'component/_drop_zone.html.twig' with {
+            uploadUrl: path('upload_file'),
+            id: 'drop-zone-test',
+            maxCount: 3,
+        } %}
+
+{#        {{ form_row(form.checkbox) }}#}
+{#        {{ form_row(form.date) }}#}
+{#        {{ form_row(form.email) }}#}
+{#        {{ form_row(form.radio) }}#}
+{#        {{ form_row(form.selectSimple) }}#}
+{#        {{ form_row(form.selectMultiple) }}#}
+{#        {{ form_row(form.phone) }}#}
+{#        {{ form_row(form.textarea) }}#}
+{#        {{ form_row(form.autocompleteSimple) }}#}
+{#        {{ form_row(form.file) }}#}
+
+    {{ form_end(form) }}
+
+{% endblock %}

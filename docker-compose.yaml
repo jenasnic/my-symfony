@@ -24,6 +24,10 @@ services:
     image: mariadb:10.6
     environment:
       MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - ~/Workspace/db/my-symfony:/var/lib/mysql
+    ports:
+      - '3306:3306'
 
   node:
     image: node:14-alpine

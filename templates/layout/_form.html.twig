@@ -1,0 +1,471 @@
+{% use 'form_div_layout.html.twig' %}
+
+{%- block form_row -%}
+  {%- set widget_attr = {} -%}
+  {%- if help is not empty -%}
+    {%- set widget_attr = {attr: {'aria-describedby': id ~"_help"}} -%}
+  {%- endif -%}
+  <div{% with {attr: row_attr|merge({'class': 'form-group'})} %}{{ block('attributes') }}{% endwith %}>
+    {{ form_widget(form, widget_attr) }}
+  </div>
+{%- endblock form_row -%}
+
+{% block form_help -%}
+  {%- if help is not empty -%}
+    <div class="formkit-help">
+      {%- if translation_domain is same as(false) -%}
+        {%- if help_html is same as(false) -%}
+          {{- help -}}
+        {%- else -%}
+          {{- help|raw -}}
+        {%- endif -%}
+      {%- else -%}
+        {%- if help_html is same as(false) -%}
+          {{- help|trans(help_translation_parameters, translation_domain) -}}
+        {%- else -%}
+          {{- help|trans(help_translation_parameters, translation_domain)|raw -}}
+        {%- endif -%}
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+{%- endblock form_help %}
+
+{%- block form_errors -%}
+  {%- if errors|length > 0 -%}
+    <ul class="formkit-messages" aria-live="polite">
+      {%- for error in errors -%}
+        <li class="formkit-message" data-message-type="validation">{{ error.message }}</li>
+      {%- endfor -%}
+    </ul>
+  {%- endif -%}
+{%- endblock form_errors -%}
+
+{%- block form_label -%}
+  {%- set label_attr = label_attr|merge({'class': (label_attr.class|default('') ~ ' formkit-label')|trim}) -%}
+  {{ parent() }}
+{%- endblock form_label -%}
+
+{%- block form_widget_simple -%}
+  {%- set type = type|default('text') -%}
+  {% if type == 'hidden' %}
+    {{ parent() }}
+  {% else %}
+    <div class="formkit-outer" data-type="{{ type }}">
+      <div class="formkit-wrapper">
+        {{ form_label(form) }}
+        <div class="formkit-inner">
+          {%- set attr = attr|merge({'class': (attr.class|default('') ~ ' formkit-input')|trim}) -%}
+          {{ parent() }}
+          {% if 'file' == type %}
+            <span class="formkit-no-files">Sélectionner un fichier</span>
+          {% endif %}
+        </div>
+      </div>
+      {% if errors|length > 0 %}
+        {{- form_errors(form) -}}
+      {% else %}
+        {{- form_help(form) -}}
+      {% endif %}
+    </div>
+  {% endif %}
+{%- endblock form_widget_simple -%}
+
+{%- block checkbox_widget -%}
+  {% import _self as helper %}
+  <div class="formkit-outer" data-type="checkbox">
+    <label class="formkit-wrapper">
+      <div class="formkit-inner">
+        {%- set attr = attr|merge({'class': (attr.class|default('') ~ ' formkit-input')|trim}) -%}
+        {{ parent() }}
+        <span class="formkit-decorator" aria-hidden="true"></span>
+      </div>
+      <span class="formkit-label">{{ helper.buildLabel(label, label_html, label_format, name, id, translation_domain, label_translation_parameters) }}</span>
+    </label>
+    {% if errors|length > 0 %}
+      {{- form_errors(form) -}}
+    {% else %}
+      {{- form_help(form) -}}
+    {% endif %}
+  </div>
+{%- endblock checkbox_widget -%}
+
+{%- block choice_widget_expanded -%}
+  {% import _self as helper %}
+  <div class="formkit-outer" data-type="radio">
+    <fieldset class="formkit-fieldset">
+      {% if label is not same as(false) %}
+        <legend class="formkit-legend">{{ helper.buildLabel(label, label_html, label_format, name, id, translation_domain, label_translation_parameters) }}</legend>
+      {% endif %}
+      {{ form_help(form) }}
+      <ul class="formkit-options">
+        {%- for child in form %}
+          {{- form_widget(child, {'attr' : attr}) -}}
+        {% endfor -%}
+      </ul>
+    </fieldset>
+    {% if errors|length > 0 %}
+      {{- form_errors(form) -}}
+    {% else %}
+      {{- form_help(form) -}}
+    {% endif %}
+  </div>
+{%- endblock choice_widget_expanded -%}
+
+{%- block radio_widget -%}
+  {% import _self as helper %}
+  <li class="formkit-option">
+    <label class="formkit-wrapper">
+      <div class="formkit-inner">
+        {%- set attr = { class: 'formkit-input' }|merge(attr) -%}
+        <input type="radio" {{ block('widget_attributes') }}{% if value is defined %} value="{{ value }}"{% endif %}{% if checked %} checked="checked"{% endif %} />
+        <span class="formkit-decorator" aria-hidden="true"></span>
+      </div>
+      <span class="formkit-label">{{ helper.buildLabel(label, label_html, label_format, name, id, translation_domain, label_translation_parameters) }}</span>
+    </label>
+  </li>
+{%- endblock radio_widget -%}
+
+{%- block choice_widget_collapsed -%}
+  <div class="formkit-outer" data-type="select"{% if multiple %} data-multiple=""{% endif %}>
+    <div class="formkit-wrapper">
+      {{ form_label(form) }}
+      <div class="formkit-inner">
+        {%- set attr = attr|merge({'class': (attr.class|default('') ~ ' formkit-input')|trim}) -%}
+        {%- if required and placeholder is none and not placeholder_in_choices and not multiple and (attr.size is not defined or attr.size <= 1) -%}
+          {%- set required = false -%}
+        {%- endif -%}
+        <select {{ block('widget_attributes') }}{% if multiple %} multiple="multiple"{% endif %}>
+          {%- if placeholder is not none -%}
+            <option class="formkit-option" value=""{% if required and value is empty %} selected="selected"{% endif %}>{{ placeholder != '' ? (translation_domain is same as(false) ? placeholder : placeholder|trans({}, translation_domain)) }}</option>
+          {%- endif -%}
+          {%- if preferred_choices|length > 0 -%}
+            {%- set options = preferred_choices -%}
+            {%- set render_preferred_choices = true -%}
+            {{- block('choice_widget_options') -}}
+            {%- if choices|length > 0 and separator is not none -%}
+              <option class="formkit-option" disabled="disabled">{{ separator }}</option>
+            {%- endif -%}
+          {%- endif -%}
+          {%- set options = choices -%}
+          {%- set render_preferred_choices = false -%}
+          {{- block('choice_widget_options') -}}
+        </select>
+      </div>
+    </div>
+  </div>
+  {% if errors|length > 0 %}
+    {{- form_errors(form) -}}
+  {% else %}
+    {{- form_help(form) -}}
+  {% endif %}
+{%- endblock choice_widget_collapsed -%}
+
+{%- block choice_widget_options -%}
+  {% for group_label, choice in options %}
+    {%- if choice is iterable -%}
+      <optgroup label="{{ choice_translation_domain is same as(false) ? group_label : group_label|trans({}, choice_translation_domain) }}">
+        {%- set options = choice -%}
+        {{- block('choice_widget_options') -}}
+      </optgroup>
+    {%- else -%}
+      {%- set optionAttr = (choice.attr|default({}))|merge({'class': (choice.attr.class|default('') ~ ' formkit-input')|trim}) -%}
+      <option
+          value="{{ choice.value }}"
+          {% with { attr: optionAttr } %}{{ block('attributes') }}{% endwith %}
+          {% if not render_preferred_choices|default(false) and choice is selectedchoice(value) %} selected="selected"{% endif %}
+      >
+        {{ choice_translation_domain is same as(false) ? choice.label : choice.label|trans(choice.labelTranslationParameters, choice_translation_domain) }}
+      </option>
+    {%- endif -%}
+  {% endfor %}
+{%- endblock choice_widget_options -%}
+
+{%- block textarea_widget -%}
+  <div class="formkit-outer" data-type="textarea">
+    <div class="formkit-wrapper">
+      {{ form_label(form) }}
+      <div class="formkit-inner">
+        {%- set attr = attr|merge({'class': (attr.class|default('') ~ ' formkit-input')|trim}) -%}
+        {{ parent() }}
+      </div>
+    </div>
+    {% if errors|length > 0 %}
+      {{- form_errors(form) -}}
+    {% else %}
+      {{- form_help(form) -}}
+    {% endif %}
+  </div>
+{%- endblock textarea_widget -%}
+
+{% block auto_complete_widget %}
+  <div class="formkit-outer" data-type="select"{% if multiple %} data-multiple=""{% endif %}>
+    <div class="formkit-wrapper">
+      {{ form_label(form) }}
+      <div
+        class="formkit-inner"
+        {{ dataset|map((value, attribute) => "data-#{attribute}=#{value|default('data-' ~ attribute)}")|join(' ') }}
+      >
+        {%- set attr = attr|merge({'class': (attr.class|default('') ~ ' formkit-input')|trim}) -%}
+        <select {{ block('widget_attributes') }}{% if multiple %} multiple{% endif %}>
+          {% if value is iterable %}
+            <option value=""></option>
+            {% for id, label in value %}
+              {% block auto_complete_widget_select_option %}
+                <option value="{{ id }}" selected="selected">{{ label }}</option>
+              {% endblock %}
+            {% endfor %}
+          {% endif %}
+        </select>
+      </div>
+    </div>
+  </div>
+  {% if errors|length > 0 %}
+    {{- form_errors(form) -}}
+  {% else %}
+    {{- form_help(form) -}}
+  {% endif %}
+{% endblock %}
+
+{%- block button_widget -%}
+  {% import _self as helper %}
+  <div class="formkit-outer" data-type="button">
+    <div class="formkit-wrapper">
+      {%- set attr = attr|merge({'class': (attr.class|default('') ~ ' formkit-input')|trim}) -%}
+      {{ parent() }}
+    </div>
+  </div>
+{%- endblock button_widget -%}
+
+
+
+
+
+
+
+
+
+
+
+
+{#{% block vich_file_widget %}#}
+{#  {% import _self as helper %}#}
+
+{#  {{ helper.buildFileWidget(form, object) }}#}
+{#{% endblock %}#}
+
+{#{% block vich_image_widget %}#}
+{#  {% import _self as helper %}#}
+
+{#  {{ helper.buildFileWidget(form, object) }}#}
+{#{% endblock %}#}
+
+{#{%- block file_widget -%}#}
+{#  <div class="file-container">#}
+{#    {% if form.vars.label is null or form.vars.label is not empty %}#}
+{#      <label>#}
+{#        {{ form_label(form) }}#}
+{#        {% if required %} *{% endif %}#}
+{#      </label>#}
+{#    {% endif %}#}
+
+{#    <div>#}
+{#      <div class="file-path-wrapper flex flex--column form-group">#}
+{#        {{ form_widget(form.file) }}#}
+{#        {% if value is not null and download_uri is defined %}#}
+{#          <a href="{{ download_uri }}" class="show-file-link" target="_blank">{{ 'form.file.show'|trans }}</a>#}
+{#        {% endif %}#}
+{#        {% if form.delete is defined %}#}
+{#          {{ form_widget(form.delete) }}#}
+{#        {% endif %}#}
+{#      </div>#}
+
+{#      <div class="errors">#}
+{#        {{ form_errors(form) }}#}
+{#      </div>#}
+{#    </div>#}
+{#  </div>#}
+{#{%- endblock -%}#}
+
+{#{% block masked_widget %}#}
+{#  {{ form_widget(form, {'attr' : attr|merge({ 'data-mask-input': mask})}) }}#}
+{#{% endblock %}#}
+
+{#{% block number_widget %}#}
+{#  {{ form_widget(form, {'attr' : attr|merge({#}
+{#    'data-number-input': true,#}
+{#    'data-number-min': min,#}
+{#    'data-number-max': max,#}
+{#    'data-number-radix': radix,#}
+{#    'data-number-scale': scale,#}
+{#    'data-number-separator': separator,#}
+{#  })}) }}#}
+{#{% endblock %}#}
+
+{#{% block collection_widget %}#}
+{#  {% import 'macros/tools.html.twig' as tool %}#}
+
+{#  {{ form_errors(form) }}#}
+
+{#  <ul#}
+{#          id="{{ form.vars.id }}_form"#}
+{#          class="mdc-list"#}
+{#          data-collection-type#}
+{#          {% if (allow_add) %}#}
+{#            data-prototype="{{ form_row(form.vars.prototype)|e('html_attr') }}"#}
+{#            data-trigger-add="{{ 'global.add'|trans }}"#}
+{#          {% endif %}#}
+{#          {% if (allow_delete) %}#}
+{#            data-trigger-remove="{{ 'global.delete'|trans }}"#}
+{#            data-trigger-remove-confirm="{{ 'global.confirmDelete'|trans }}"#}
+{#          {% endif %}#}
+{#  >#}
+{#    {% if (allow_add) %}{{ tool.iconButton('add', 'global.add'|trans, {'classes': 'add-item'}) }}{% endif %}#}
+{#    {% for child in form %}#}
+{#      <li class="mdc-list-item">#}
+{#        {{ form_row(child) }}#}
+{#      </li>#}
+{#    {% endfor %}#}
+{#  </ul>#}
+{#{% endblock %}#}
+
+{#{% block completable_choice_widget %}#}
+{#  {% import _self as helper %}#}
+{#  {%- set cssClasses = 'select-wrapper select-wrapper--' ~ (filled ? 'filled' : 'outlined') -%}#}
+{#  {% if (label is same as(false)) %}#}
+{#    {%- set cssClasses = 'select-wrapper--no-label ' ~ cssClasses -%}#}
+{#  {% endif %}#}
+{#  {% if errors|length > 0 %}#}
+{#    {%- set cssClasses = 'select-wrapper--invalid ' ~ cssClasses -%}#}
+{#  {% endif %}#}
+
+{#  {{ form_widget(form) }}#}
+
+{#  <div#}
+{#          class="{{ cssClasses }}"#}
+{#          data-select-type="{{ filled ? 'filled' : 'outlined' }}"#}
+{#  >#}
+{#    {% if (label is not same as(false)) -%}#}
+{#      <div class="select-floating-label{% if required %} select-floating-label--required{% endif %}">#}
+{#        {{ helper.buildLabel(label, label_html, label_format, name, id, translation_domain, label_translation_parameters) }}#}
+{#      </div>#}
+{#    {% endif %}#}
+{#    <select#}
+{#            data-bind-completable-choice="{{ id }}"#}
+{#            data-improve-select="data-improve-select"#}
+{#            data-tags="data-tags"#}
+{#            {% if placeholder %}data-placeholder="{{ placeholder|trans }}"{% endif %}#}
+{#    >#}
+{#      {% if placeholder %}#}
+{#        <option value=""></option>#}
+{#      {% endif %}#}
+{#      {% for choice in choices %}#}
+{#        <option value="{{ choice }}"{% if value == choice %} selected="selected"{% endif %}>{{ choice }}</option>#}
+{#      {% endfor %}#}
+{#    </select>#}
+{#    {% if errors|length > 0 %}#}
+{#      {{- form_errors(form) -}}#}
+{#    {% else %}#}
+{#      {{- form_help(form) -}}#}
+{#    {% endif %}#}
+{#  </div>#}
+{#{% endblock %}#}
+
+{#{% block date_range_widget %}#}
+{#  {% import _self as helper %}#}
+{#  <div class="form-group">#}
+{#    <div class="form-label">#}
+{#      {{ helper.buildLabel(label, label_html, label_format, name, id, translation_domain, label_translation_parameters) }}#}
+{#    </div>#}
+{#    <div class="row">#}
+{#      <div class="col-xl-6 col-md-12">{{ form_widget(form.from) }}</div>#}
+{#      <div class="col-xl-6 col-md-12">{{ form_widget(form.to) }}</div>#}
+{#    </div>#}
+{#  </div>#}
+{#{% endblock %}#}
+
+{#{% block google_captcha_row %}#}
+{#  <div class="container-captcha">#}
+{#    <div class="g-recaptcha" data-sitekey="{{ site_key }}"></div>#}
+{#    <div class="captcha-error">{{ form_errors(form) }}</div>#}
+{#  </div>#}
+{#{% endblock %}#}
+
+{#{% macro buildFileWidget(form, object) %}#}
+{#  {% import 'macros/tools.html.twig' as tool %}#}
+{#  {% set formVars = form.vars %}#}
+{#  {% set fileVars = form.file.vars %}#}
+
+{#  <div data-file>#}
+{#    <div>#}
+{#      {{ tool.button('form.file.input.label'|trans, 'button', {'leading_icon': 'file_upload'}) }}#}
+
+{#      <div data-placeholders>#}
+{#        <div#}
+{#                data-placeholder-custom#}
+{#                {% if (form.delete is defined and form.delete.vars.checked == true) or object is null or object.id is null %} class="hide"{% endif %}#}
+{#        >#}
+{#          {{ object is not null ? object.originalName : '' }}#}
+{#        </div>#}
+{#        <div#}
+{#                data-placeholder-default#}
+{#                {% if (form.delete is defined and form.delete.vars.checked == false) or (form.delete is not defined and object is not null and object.id is not null) %}#}
+{#                  class="hide"#}
+{#                {% endif %}#}
+{#        >#}
+{#          {{ 'form.file.no_file'|trans }}#}
+{#        </div>#}
+{#      </div>#}
+
+{#      <input#}
+{#              data-input#}
+{#              type="file"#}
+{#              id="{{ fileVars.id }}"#}
+{#              name="{{ fileVars.full_name }}"#}
+{#              {% if fileVars.required %} required{% endif%}#}
+{#      />#}
+{#    </div>#}
+
+{#    {{ form_errors(form) }}#}
+
+{#    {% if formVars.attr is not empty and formVars.attr.format_label is defined %}#}
+{#      <div class="format">{{ formVars.attr.format_label|trans }}</div>#}
+{#    {% endif %}#}
+
+{#  </div>#}
+{#{% endmacro %}#}
+
+{% macro buildLabel(label, label_html, label_format, name, id, translation_domain, label_translation_parameters) %}
+  {%- if label is empty -%}
+    {%- if label_format is not empty -%}
+      {%- set label = label_format|replace({
+        '%name%': name,
+        '%id%': id,
+      }) -%}
+    {%- elseif label is not same as(false) -%}
+      {%- set label = name|humanize -%}
+    {%- endif -%}
+  {%- endif -%}
+  {%- if translation_domain is same as(false) -%}
+    {%- if label_html is same as(false) -%}
+      {{- label -}}
+    {%- else -%}
+      {{- label|raw -}}
+    {%- endif -%}
+  {%- else -%}
+    {%- if label_html is same as(false) -%}
+      {{- label|trans(label_translation_parameters, translation_domain) -}}
+    {%- else -%}
+      {{- label|trans(label_translation_parameters, translation_domain)|raw -}}
+    {%- endif -%}
+  {%- endif -%}
+{% endmacro %}
+
+{#{% block wysiwyg_row %}#}
+{#  <div class="container-wysiwyg{% if big %} large{% endif %}">#}
+{#    {{ form_row(form, {attr: {class: 'wysiwyg'}}) }}#}
+{#  </div>#}
+{#{% endblock %}#}
+
+
+
+
