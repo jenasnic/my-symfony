@@ -1,0 +1,34 @@
+version: '3'
+
+services:
+  php:
+    build:
+      context: ./.devops/docker/php
+      args:
+        PHP_VERSION: 8.1
+        WITH_GD: 1
+    volumes:
+      - .:/srv:cached
+      - ~/.cache/composer:/root/.composer:cached
+      - ~/.config/JetBrains/PhpStorm2022.1/scratches:/root/.config/JetBrains/PhpStorm2022.1/scratches
+
+  web:
+    build:
+      context: ./.devops/docker/nginx/symfony
+    volumes:
+      - .:/srv:cached
+    ports:
+      - '80:80'
+
+  db:
+    image: mariadb:10.6
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+
+  node:
+    image: node:14-alpine
+    working_dir: /app
+    volumes:
+      - ./:/app
+    ports:
+      - '9001:9001'
