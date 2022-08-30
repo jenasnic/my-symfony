@@ -21,7 +21,7 @@
             <tr>
                 <td>{{ my_model.id }}</td>
                 <td>{{ my_model.label }}</td>
-                <td>{{ my_model.code }}</td>
+                <td>{{ my_model.code|trans }}</td>
                 <td>{{ my_model.value }}</td>
                 <td>{{ my_model.date ? my_model.date|date('Y-m-d H:i:s') : '' }}</td>
                 <td>
