@@ -10,7 +10,7 @@ services:
     volumes:
       - .:/srv:cached
       - ~/.cache/composer:/root/.composer:cached
-      - ~/.config/JetBrains/PhpStorm2022.1/scratches:/root/.config/JetBrains/PhpStorm2022.1/scratches
+      - ~/.config/JetBrains/PhpStorm2022.2/scratches:/root/.config/JetBrains/PhpStorm2022.2/scratches
 
   web:
     build:
@@ -24,6 +24,8 @@ services:
     image: mariadb:10.6
     environment:
       MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - ~/Workspace/db/my-symfony:/var/lib/mysql
     ports:
       - '3306:3306'
 
