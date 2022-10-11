@@ -21,7 +21,7 @@ class MyModelType extends AbstractType
                     'Alpha' => MyEnum::ALPHA,
                     'Bravo' => MyEnum::BRAVO,
                     'Charlie' => MyEnum::CHARLIE,
-                ]
+                ],
             ])
             ->add('value')
             ->add('date', DateType::class, [

@@ -4,7 +4,6 @@ namespace App\Entity;
 
 use App\Enum\MyEnum;
 use App\Repository\MyModelRepository;
-use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: MyModelRepository::class)]
@@ -25,7 +24,7 @@ class MyModel
     private ?int $value = null;
 
     #[ORM\Column(type: 'datetime', nullable: true)]
-    private ?DateTime $date = null;
+    private ?\DateTime $date = null;
 
     public function getId(): ?int
     {
@@ -68,12 +67,12 @@ class MyModel
         return $this;
     }
 
-    public function getDate(): ?DateTime
+    public function getDate(): ?\DateTime
     {
         return $this->date;
     }
 
-    public function setDate(?DateTime $date): self
+    public function setDate(?\DateTime $date): self
     {
         $this->date = $date;
 

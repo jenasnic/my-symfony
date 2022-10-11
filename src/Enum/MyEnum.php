@@ -11,7 +11,7 @@ enum MyEnum: string implements TranslatableInterface
     case BRAVO = 'Bravo';
     case CHARLIE = 'Charlie';
 
-    public function trans(TranslatorInterface $translator, string $locale = null): string
+    public function trans(TranslatorInterface $translator, ?string $locale = null): string
     {
         return sprintf('myenum.trans : %s // %s', $this->name, $this->value);
     }

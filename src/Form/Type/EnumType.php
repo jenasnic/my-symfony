@@ -2,7 +2,6 @@
 
 namespace App\Form\Type;
 
-use LogicException;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\OptionsResolver\Options;
@@ -19,7 +18,7 @@ class EnumType extends AbstractType
             ->setDefaults([
                 'choices' => function (Options $options): array {
                     if (!method_exists($options['class'], 'getAll')) {
-                        throw new LogicException('Enumeration must implements method "getAll"');
+                        throw new \LogicException('Enumeration must implements method "getAll"');
                     }
 
                     return $options['class']::getAll();

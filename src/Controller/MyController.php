@@ -15,7 +15,7 @@ class MyController extends AbstractController
     /**
      * @Route(path="/", name="home")
      */
-    public function test(): Response
+    public function home(): Response
     {
         return $this->render('home.html.twig');
     }
