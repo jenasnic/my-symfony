@@ -1,0 +1,20 @@
+@use 'assets/styles/colors';
+
+.cartFeed {
+  align-items: center;
+  background-color: colors.$white;
+  display: flex;
+  font-size: 1.1em;
+  justify-content: space-between;
+  padding: 15px 20px;
+
+  .productWrapper {
+    display: flex;
+
+    input {
+      border: 1px solid colors.$alto;
+      margin-right: 20px;
+      padding: 0 10px;
+    }
+  }
+}

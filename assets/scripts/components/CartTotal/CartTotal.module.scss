@@ -1,0 +1,59 @@
+@use 'assets/styles/colors';
+
+$horizontalPadding: 20px;
+
+.cartTotal {
+  background-color: colors.$white;
+  width: 100%;
+
+  > .title {
+    color: colors.$abbey;
+    font-size: 1.7em;
+    font-weight: 700;
+    padding: $horizontalPadding $horizontalPadding 15px $horizontalPadding;
+  }
+
+  > .line {
+    color: colors.$jumbo;
+    display: flex;
+    font-weight: 400;
+    justify-content: space-between;
+    padding: 5px $horizontalPadding 10px $horizontalPadding;
+
+    &--total-et {
+      color: colors.$abbey;
+      font-weight: 700;
+    }
+
+    &--total-tax {
+      color: colors.$abbey;
+    }
+
+    &--total-it {
+      background-color: colors.$porcelain;
+      text-transform: uppercase;
+      padding-top: 10px;
+    }
+  }
+
+  > hr {
+    margin: 5px $horizontalPadding 10px $horizontalPadding;
+    height: 1px;
+    border: none;
+    background-color: colors.$porcelain;
+  }
+
+  .withIcon {
+    position: relative;
+    padding-right: 25px;
+
+    :global {
+      .icon {
+        font-size: 1.3em;
+        position: absolute;
+        right: 0;
+        top: -1px;
+      }
+    }
+  }
+}

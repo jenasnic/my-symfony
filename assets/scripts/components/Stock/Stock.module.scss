@@ -1,0 +1,44 @@
+@use 'assets/styles/colors';
+
+$fontSize: 0.8em;
+$iconTop: calc($fontSize / 2);
+
+.stock {
+  background-color: colors.$porcelain;
+  border-radius: 99em;
+  font-size: $fontSize;
+  padding: 10px 20px;
+  position: relative;
+
+  &:before {
+    border-radius: 100%;
+    content: '';
+    height: $fontSize;
+    left: 15px;
+    top: calc(50% - $iconTop);
+    position: absolute;
+    width: $fontSize;
+  }
+
+  &--available {
+    &:before {
+      background-color: colors.$sushi;
+    }
+  }
+
+  &--restocking {
+    &:before {
+      background-color: colors.$candlelight;
+    }
+  }
+
+  &--stock-out {
+    &:before {
+      background-color: colors.$valencia;
+    }
+  }
+
+  .label {
+    padding-left: 25px;
+  }
+}

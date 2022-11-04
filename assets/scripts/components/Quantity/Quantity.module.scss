@@ -1,0 +1,37 @@
+@use 'assets/styles/colors';
+
+$height: 36px;
+$width: 135px;
+$gap: 1px;
+
+.quantity {
+  background-color: colors.$alto;
+  display: flex;
+  font-size: 1em;
+  height: $height;
+  padding: $gap;
+  gap: $gap;
+  width: $width;
+
+  span {
+    color: colors.$abbey;
+    display: block;
+    height: $height;
+    line-height: $height - 1;
+    text-align: center;
+
+    &.button {
+      background-color: colors.$alabaster;
+      cursor: pointer;
+      user-select: none;
+      width: $height;
+    }
+
+    &.value {
+      background-color: colors.$white;
+      flex-grow: 1;
+      font-size: 1.1em;
+      user-select: none;
+    }
+  }
+}

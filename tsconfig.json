@@ -1,11 +1,12 @@
 {
   "compilerOptions": {
     "allowJs": true,
-    "target": "es6",
-    "sourceMap": true,
-    "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
+    "jsx": "preserve",
     "module": "es2020",
+    "moduleResolution": "node",
+    "sourceMap": true,
     "strictNullChecks": true,
+    "target": "es6"
   },
 }

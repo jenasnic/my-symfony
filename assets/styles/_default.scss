@@ -1,0 +1,54 @@
+@use 'colors';
+
+$default-margin: 15px;
+
+:root {
+  --secondary-color: #{colors.$candlelight};
+  --primary-color: #{colors.$abbey};
+  --main-color: #{colors.$abbey};
+}
+
+body {
+  background-color: #fff;
+  font: 14px "Century Gothic", Futura, sans-serif;
+  margin: 20px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+h1 {
+  margin-bottom: 2 * $default-margin;
+}
+
+img {
+  border: none;
+}
+
+p {
+  margin-bottom: $default-margin;
+}
+
+ul > li {
+  margin: 0 0 $default-margin $default-margin;
+}
+
+.container {
+  background-color: colors.$alabaster;
+  margin: 0 auto;
+  max-width: 1280px;
+  padding: 30px;
+  width: 90%;
+}
+
+.button {
+  cursor: pointer;
+  margin: 0 2px;
+  padding: 5px 10px;
+}
+
+hr {
+  margin: 30px 0;
+}

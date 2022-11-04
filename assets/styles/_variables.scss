@@ -1,0 +1,72 @@
+/* variables.module.scss */
+$dark: #000000;
+$white: #FFFFFF;
+$alto: #CECECE;
+$abbey: #424344;
+$porcelain: #EBECED;
+$alabaster: #F8F8F8;
+$cinnabar: #e74c3c;
+$sushi: #71C842;
+$christine: #E7670D;
+
+$color-medium-light: $alto;
+$color-medium: $abbey;
+$color-text-light: $white;
+$color-text-extra-light: $porcelain;
+
+$color-error: $cinnabar;
+$color-in-stock: $sushi;
+$color-out-stock: $christine;
+
+$color-background-menu: $porcelain;
+$color-background-submenu: $alabaster;
+$color-background-medium-light: $porcelain;
+$color-background-medium: $alto;
+$color-background-light: $white;
+$color-background-medium-light: $porcelain;
+
+$color-border-medium: $alto;
+
+/* Picto */
+$icon-facebook: "\e90c";
+$icon-instagram: "\e90d";
+$icon-linkedin: "\e90e";
+$icon-youtube: "\e90f";
+$icon-business: "\e906";
+$icon-headphone: "\e907";
+$icon-key: "\e908";
+$icon-decoration: "\e909";
+$icon-tool-full: "\e90a";
+$icon-position: "\e900";
+$icon-catalog: "\e901";
+$icon-grinder: "\e902";
+$icon-tools: "\e903";
+$icon-arrow: "\e90b";
+$icon-left: "\e904";
+$icon-right: "\e905";
+$icon-caret: "\e910";
+$icon-checkmark: "\e911";
+$icon-list: "\e912";
+$icon-grid: "\e913";
+$icon-search: "\e914";
+$icon-signal: "\e915";
+$icon-envelope: "\e918";
+$icon-download: "\e916";
+$icon-trash: "\e917";
+$icon-attention: "\e919";
+$icon-basket: "\e91a";
+$icon-info: "\e91b";
+$icon-pen: "\e91c";
+$icon-warning: "\e91d";
+
+/* Layout */
+$breakpoints: (
+  xs: 440px,
+  sm: 768px,
+  md: 990px,
+  lg: 1240px,
+  xl: 1600px,
+  full-hd: 1900px,
+);
+
+$md-container: 1200px;

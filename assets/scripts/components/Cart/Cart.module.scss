@@ -1,0 +1,67 @@
+@use 'assets/styles/colors';
+
+$gap: 12px;
+$horizontalPadding: 20px;
+
+.cart {
+  display: flex;
+  gap: $gap;
+
+  .content {
+    display: flex;
+    flex-direction: column;
+    gap: $gap;
+    width: 70%;
+
+    .contentList {
+      background-color: colors.$white;
+      display: flex;
+      flex-direction: column;
+      padding: 0 $horizontalPadding;
+
+      > div {
+        box-sizing: border-box;
+        padding: 20px 0;
+
+        &:not(:last-child) {
+          border-bottom: 1px solid colors.$alto;
+        }
+      }
+    }
+  }
+
+  .resume {
+    display: flex;
+    flex-direction: column;
+    gap: $gap;
+    font-size: 1.2em;
+    width: 30%;
+
+    .resumeAction {
+      background-color: colors.$white;
+      display: flex;
+      flex-direction: column;
+      gap: $gap;
+      padding: (2 * $gap) $horizontalPadding;
+    }
+
+    .shippingNote {
+      align-items: center;
+      background-color: colors.$porcelain;
+      color: colors.$jumbo;
+      display: flex;
+      flex-direction: column;
+      font-size: 0.8em;
+      justify-content: center;
+      padding: 25px $horizontalPadding;
+      text-align: center;
+
+      :global {
+        .icon {
+          font-size: 2.4em;
+          margin-bottom: 5px;
+        }
+      }
+    }
+  }
+}

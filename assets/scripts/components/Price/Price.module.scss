@@ -1,0 +1,14 @@
+@use 'assets/styles/colors';
+
+.price {
+  color: colors.$abbey;
+
+  > span {
+    padding-right: 0.5rem;
+  }
+
+  .tax {
+    font-size: 0.8em;
+    padding-right: 0;
+  }
+}
